@@ -1,0 +1,27 @@
+{
+  "name": "impress-design-api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "db:init": "node scripts/init-db.js",
+    "catalog:sync": "node scripts/sync-catalog.js",
+    "catalog:export": "node scripts/export-products.js",
+    "toptex:test": "node scripts/test-toptex.js"
+  },
+  "dependencies": {
+    "bcryptjs": "2.4.3",
+    "cors": "2.8.5",
+    "dotenv": "16.4.5",
+    "express": "4.21.1",
+    "jsonwebtoken": "9.0.2",
+    "multer": "1.4.5-lts.1",
+    "mysql2": "3.11.4",
+    "sql.js": "1.14.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

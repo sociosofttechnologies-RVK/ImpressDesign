@@ -1,0 +1,34 @@
+# Apache (BigRock / cPanel) config for the React single-page app.
+DirectoryIndex index.html
+ErrorDocument 503 '{"error":"The API is offline."}'
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  # Force HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  # No API is deployed on this host: answer /api/... with 503 (JSON) instead of index.html, so the
+  # web app sees "API offline" and switches to the offline catalog (catalog/products.json).
+  RewriteRule ^api(/|$) - [R=503,L]
+  # Serve real files and folders as-is; send every other path (e.g. /clothing) to index.html
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?|jpg|png|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "index\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# Compress the offline product catalog (public/catalog/products.json) and other text files.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE application/json text/html text/css application/javascript image/svg+xml
+</IfModule>

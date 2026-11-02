@@ -1,0 +1,4 @@
+node_modules
+dist
+public/catalog
+server/data/toptex-products-all.json
